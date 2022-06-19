@@ -43,6 +43,10 @@ int main(int argc, char** argv) {
     tf::TransformListener listener;
     auto waitForTransform = nh.param("wait_for_transform", 0.01);
 
+    auto filter_param_a = nh.param("filter_param_a", 0.0);
+    auto filter_param_b = nh.param("filter_param_b", 0.0);
+    auto filter_param_c = nh.param("filter_param_c", 0.0);
+
     ouster_ros::OSConfigSrv cfg{};
     auto client = nh.serviceClient<ouster_ros::OSConfigSrv>("os_config");
     client.waitForExistence();
@@ -92,9 +96,9 @@ int main(int argc, char** argv) {
             if (h != ls.headers.end()) {
                 for (int i = 0; i < n_returns; i++) {
                     if(fixed_frame.empty()) {
-                        scan_to_cloud(xyz_lut, h->timestamp, ls, cloud, i);
+                        scan_to_cloud(xyz_lut, h->timestamp, ls, cloud, i, filter_param_a, filter_param_b, filter_param_c);
                     } else {
-                        scan_to_cloud(xyz_lut, h->timestamp, ls, cloud, i, listener, fixed_frame, sensor_frame, waitForTransform);
+                        scan_to_cloud(xyz_lut, h->timestamp, ls, cloud, i, filter_param_a, filter_param_b, filter_param_c, listener, fixed_frame, sensor_frame, waitForTransform);
                     }
                     lidar_pubs[i].publish(ouster_ros::cloud_to_cloud_msg(
                         cloud, h->timestamp, sensor_frame));

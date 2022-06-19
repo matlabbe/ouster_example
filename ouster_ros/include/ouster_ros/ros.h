@@ -69,11 +69,17 @@ sensor_msgs::Imu packet_to_imu_msg(const PacketMsg& pm,
  * @param scan_ts scan start used to caluclate relative timestamps for points
  * @param ls input lidar data
  * @param return_index index of return desired starting at 0
+ * @param filter_param_a parameter of the intensity filter using this quadratic equation with x as the range: ax^2 + bx + c
+ * @param filter_param_b parameter of the intensity filter using this quadratic equation with x as the range: ax^2 + bx + c
+ * @param filter_param_c parameter of the intensity filter using this quadratic equation with x as the range: ax^2 + bx + c
  * @param cloud output pcl pointcloud to populate
  */
 void scan_to_cloud(const ouster::XYZLut& xyz_lut,
                    ouster::LidarScan::ts_t scan_ts, const ouster::LidarScan& ls,
-                   ouster_ros::Cloud& cloud, int return_index = 0);
+                   ouster_ros::Cloud& cloud, int return_index = 0,
+                   const float & filter_param_a=0,
+                   const float & filter_param_b=0,
+                   const float & filter_param_c=0);
 
 /**
  * Populate a PCL point cloud from a LidarScan taking into account
@@ -83,6 +89,10 @@ void scan_to_cloud(const ouster::XYZLut& xyz_lut,
  * @param xyz_lut lookup table from sensor beam angles (see lidar_scan.h)
  * @param scan_ts scan start used to caluclate relative timestamps for points
  * @param ls input lidar data
+ * @param return_index index of return desired starting at 0
+ * @param filter_param_a parameter of the intensity filter using this quadratic equation with x as the range: ax^2 + bx + c
+ * @param filter_param_b parameter of the intensity filter using this quadratic equation with x as the range: ax^2 + bx + c
+ * @param filter_param_c parameter of the intensity filter using this quadratic equation with x as the range: ax^2 + bx + c
  * @param cloud output pcl pointcloud to populate
  * @param listener TF listener used to interpolate the transform between fixed_frame and sensor_frame
  * @param fixed_frame the fixed frame
@@ -93,6 +103,9 @@ void scan_to_cloud(const ouster::XYZLut& xyz_lut,
                    ouster::LidarScan::ts_t scan_ts, const ouster::LidarScan& ls,
                    ouster_ros::Cloud& cloud,
                    int return_index,
+                   const float & filter_param_a,
+                   const float & filter_param_b,
+                   const float & filter_param_c,
                    tf::TransformListener & listener,
                    const std::string & fixed_frame,
                    const std::string & sensor_frame,
