@@ -14,6 +14,9 @@
   <arg name="udp_profile_lidar" default="" doc="lidar packet profile: LEGACY, RNG19_RFL8_SIG16_NIR16_DUAL, RNG19_RFL8_SIG16_NIR16, RNG15_RFL8_NIR8"/>
   <arg name="fixed_frame_id" default="" doc="lidar de-skewing based on motion relative to this fixed frame"/>
   <arg name="wait_for_transform" default="0.01" doc="maximum time to wait for TF when de-skewing lidar"/>
+  <arg name="filter_param_a" default="0.0" doc="parameter of the intensity filter using this quadratic equation with x as the range: ax^2 + bx + c"/>
+  <arg name="filter_param_b" default="0.0" doc="parameter of the intensity filter using this quadratic equation with x as the range: ax^2 + bx + c"/>
+  <arg name="filter_param_c" default="0.0" doc="parameter of the intensity filter using this quadratic equation with x as the range: ax^2 + bx + c"/>
 
   <node pkg="ouster_ros" name="os_node" type="os_node" output="screen" required="true">
     <param name="~/lidar_mode" type="string" value="$(arg lidar_mode)"/>
@@ -34,6 +37,9 @@
     <param name="~/tf_prefix" value="$(arg tf_prefix)"/>
     <param name="~/fixed_frame_id" value="$(arg fixed_frame_id)"/>
     <param name="~/wait_for_transform" value="$(arg wait_for_transform)"/>
+    <param name="~/filter_param_a" value="$(arg filter_param_a)"/>
+    <param name="~/filter_param_b" value="$(arg filter_param_b)"/>
+    <param name="~/filter_param_c" value="$(arg filter_param_c)"/>
   </node>
 
   <node if="$(arg viz)" pkg="rviz" name="rviz" type="rviz" args="$(arg rviz_config)" output="screen" required="true" />
